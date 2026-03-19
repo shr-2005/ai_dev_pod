@@ -167,6 +167,9 @@ st.markdown("""
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     
+    /* Hide the multipage nav dropdown Streamlit auto-generates */
+    [data-testid="stSidebarNav"] {display: none;}
+    
     /* Sidebar nav */
     .sidebar-nav-item {
         padding: 0.6rem 1rem;
@@ -243,13 +246,13 @@ def render_sidebar():
         else:
             st.markdown("<p style='color: #374151; font-size: 0.85rem;'>No pipeline run yet</p>", unsafe_allow_html=True)
 
-        # HF Token status
+        # Groq API status
         st.markdown("---")
-        hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN", "")
-        if hf_token and hf_token != "your_huggingface_token_here" and hf_token.startswith("hf_"):
-            st.markdown("🟢 <span style='color:#22c55e;font-size:0.8rem;'>HF API Connected</span>", unsafe_allow_html=True)
+        groq_key = os.getenv("GROQ_API_KEY", "")
+        if groq_key and groq_key != "your_groq_api_key_here":
+            st.markdown("🟢 <span style='color:#22c55e;font-size:0.8rem;'>Groq API Connected</span>", unsafe_allow_html=True)
         else:
-            st.markdown("🔴 <span style='color:#ef4444;font-size:0.8rem;'>Set HF_TOKEN in .env</span>", unsafe_allow_html=True)
+            st.markdown("🔴 <span style='color:#ef4444;font-size:0.8rem;'>Set GROQ_API_KEY in .env</span>", unsafe_allow_html=True)
 
 
 def main():
@@ -266,29 +269,30 @@ def main():
 
     render_sidebar()
 
-    # Route to page
+    # Route to page — imports from _pages (renamed from pages to avoid
+    # Streamlit's built-in multipage nav auto-detection)
     page = st.session_state.current_page
 
     if page == "dashboard":
-        from pages.dashboard import render_dashboard
+        from _pages.dashboard import render_dashboard
         render_dashboard()
     elif page == "pipeline":
-        from pages.pipeline_runner import render_pipeline
+        from _pages.pipeline_runner import render_pipeline
         render_pipeline()
     elif page == "user_stories":
-        from pages.artifact_viewer import render_artifact_viewer
+        from _pages.artifact_viewer import render_artifact_viewer
         render_artifact_viewer("user_stories", "📋 User Stories")
     elif page == "design":
-        from pages.artifact_viewer import render_artifact_viewer
+        from _pages.artifact_viewer import render_artifact_viewer
         render_artifact_viewer("design_doc", "🏗️ Design Document")
     elif page == "code":
-        from pages.artifact_viewer import render_artifact_viewer
+        from _pages.artifact_viewer import render_artifact_viewer
         render_artifact_viewer("code", "💻 Generated Code")
     elif page == "tests":
-        from pages.test_runner import render_test_runner
+        from _pages.test_runner import render_test_runner
         render_test_runner()
     elif page == "chat":
-        from pages.pm_chat import render_pm_chat
+        from _pages.pm_chat import render_pm_chat
         render_pm_chat()
 
 
