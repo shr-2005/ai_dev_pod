@@ -1,0 +1,68 @@
+# User Stories Template
+
+## Project: [Project Name]
+**Version:** 1.0  
+**Author:** Business Analyst Agent  
+**Date:** [Date]
+
+---
+
+## Epic 1: [Epic Name]
+*Brief description of the epic*
+
+### US-001: [Story Title]
+**As a** [user type],  
+**I want to** [action/feature],  
+**So that** [benefit/value].
+
+**Priority:** High / Medium / Low  
+**Story Points:** 1 / 2 / 3 / 5 / 8  
+**Status:** To Do
+
+#### Acceptance Criteria:
+- [ ] AC1: [Specific, testable criterion]
+- [ ] AC2: [Specific, testable criterion]
+- [ ] AC3: [Specific, testable criterion]
+
+#### Dependencies: None / US-XXX
+
+---
+
+## Epic 2: [Epic Name]
+
+### US-002: [Story Title]
+**As a** [user type],  
+**I want to** [action/feature],  
+**So that** [benefit/value].
+
+**Priority:** High  
+**Story Points:** 3  
+**Status:** To Do
+
+#### Acceptance Criteria:
+- [ ] AC1: System must [verifiable behavior]
+- [ ] AC2: User can [verifiable action]
+- [ ] AC3: Error handling: [error scenario]
+
+---
+
+## Non-Functional Requirements
+
+### US-NFR-001: Performance
+**As a** system operator,  
+**I want** the system to respond within 2 seconds for 95% of requests,  
+**So that** users have a responsive experience.
+
+### US-NFR-002: Security
+**As a** security officer,  
+**I want** all data to be encrypted in transit and at rest,  
+**So that** user data is protected.
+
+---
+
+## Story Map Summary
+
+| Epic | Stories | Total Points | Priority |
+|------|---------|--------------|----------|
+| Epic 1 | US-001 to US-00X | XX | High |
+| Epic 2 | US-00X to US-00X | XX | Medium |

@@ -1,0 +1,110 @@
+# Test Cases Template
+
+## Project: [Project Name]
+**Version:** 1.0  
+**Author:** Testing Agent  
+**Date:** [Date]
+
+---
+
+## Test Plan
+
+### Objectives
+- Verify all user story acceptance criteria are met
+- Ensure system stability under normal and edge-case conditions
+- Validate data integrity and security requirements
+
+### Scope
+- In Scope: [features covered]
+- Out of Scope: [features excluded]
+
+### Test Environment
+- Python 3.10+
+- pytest 7.x
+- Test database (in-memory SQLite for unit tests)
+
+---
+
+## Manual Test Cases
+
+### TC-001: [Test Case Name]
+**User Story:** US-001  
+**Priority:** High
+
+| Step | Action | Expected Result | Status |
+|------|--------|----------------|--------|
+| 1 | [action] | [expected] | [ ] |
+| 2 | [action] | [expected] | [ ] |
+
+**Preconditions:** [system state before test]  
+**Test Data:** [sample data to use]  
+**Pass/Fail Criteria:** [clear success condition]
+
+---
+
+## Automated Tests (pytest)
+
+```python
+import pytest
+from unittest.mock import Mock, patch
+
+
+class TestFeatureName:
+    """Test suite for [Feature Name]."""
+
+    def setup_method(self):
+        """Set up test fixtures."""
+        pass
+
+    def test_happy_path(self):
+        """Test: [description of what is being tested]."""
+        # Arrange
+        # Act
+        # Assert
+        pass
+
+    def test_invalid_input(self):
+        """Test: System rejects invalid input."""
+        # Arrange
+        # Act
+        # Assert
+        pass
+
+    def test_edge_case(self):
+        """Test: Boundary condition handling."""
+        # Arrange
+        # Act
+        # Assert
+        pass
+
+
+class TestIntegration:
+    """Integration test suite."""
+
+    def test_end_to_end_workflow(self):
+        """Test: Complete user workflow."""
+        pass
+```
+
+---
+
+## Test Data
+
+### Valid Test Data
+```json
+{
+  "valid_user": {
+    "email": "test@example.com",
+    "name": "Test User"
+  }
+}
+```
+
+### Invalid Test Data
+```json
+{
+  "invalid_email": "not-an-email",
+  "empty_name": "",
+  "sql_injection": "'; DROP TABLE users; --"
+}
+```
