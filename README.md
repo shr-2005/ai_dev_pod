@@ -1,159 +1,135 @@
 # 🤖 AI Virtual Development Pod
 
-An intelligent multi-agent system that simulates a complete software development team — from requirements analysis to code generation and automated testing.
+An intelligent multi-agent system that simulates a complete software development team — automatically generating user stories, design documents, code, and test cases from high-level business requirements.
+
+> Built with **Meta Llama 3.3 70B** (via Groq), **ChromaDB**, **MiniLM embeddings**, **CrewAI**, and **Streamlit**.
 
 ---
 
-## 🏗️ Architecture Overview
+## 🏗️ Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    Streamlit Frontend                           │
-│  Dashboard | Pipeline | Artifacts | Test Runner | PM Chat       │
-└──────────────────────────┬──────────────────────────────────────┘
-                           │
-                 ┌─────────▼─────────┐
-                 │  Project Lead     │
-                 │  Orchestrator     │  ← CrewAI
-                 └─────────┬─────────┘
-          ┌────────┬────────┼────────┬────────┐
-          ▼        ▼        ▼        ▼        ▼
-     ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐
-     │  BA  │ │Design│ │ Dev  │ │ Test │ │  QA  │
-     │Agent │ │Agent │ │Agent │ │Agent │ │Agent │
-     └──────┘ └──────┘ └──────┘ └──────┘ └──────┘
-          │        │        │        │
-          └────────┴────────┴────────┘
-                           │
-          ┌────────────────┼────────────────┐
-          ▼                                 ▼
-   ┌─────────────┐                 ┌────────────────┐
-   │   Llama 3   │                 │   ChromaDB     │
-   │  8B Instruct│                 │  + MiniLM      │
-   │  HuggingFace│                 │  Embeddings    │
-   └─────────────┘                 └────────────────┘
+┌─────────────────────────────────────────────────┐
+│              Streamlit Frontend                 │
+│  Dashboard │ Pipeline │ Artifacts │ PM Chat     │
+└──────────────────────┬──────────────────────────┘
+                       ↓
+           ┌───────────────────────┐
+           │  Project Lead         │
+           │  Orchestrator (CrewAI)│
+           └───────────┬───────────┘
+       ┌───────┬────────┼────────┬───────┐
+       ↓       ↓        ↓        ↓       ↓
+   ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐
+   │  BA  │ │Design│ │ Dev  │ │ Test │
+   │Agent │ │Agent │ │Agent │ │Agent │
+   └──────┘ └──────┘ └──────┘ └──────┘
+       ↓                              ↓
+┌──────────────────┐    ┌──────────────────────┐
+│   Groq API       │    │  ChromaDB + MiniLM   │
+│ Llama 3.3 70B    │    │  Template Retrieval  │
+└──────────────────┘    └──────────────────────┘
 ```
+
+---
 
 ## 🤝 Agent Roles
 
 | Agent | Role | Output |
 |-------|------|--------|
-| **Business Analyst** | Transforms requirements into user stories | User stories with acceptance criteria |
-| **Design Agent** | Creates software architecture | Design document with schema, APIs |
-| **Developer Agent** | Generates production code | Complete, documented source code |
-| **Testing Agent** | Creates and runs tests | Test cases + execution report |
+| **Business Analyst** | Analyzes requirements | User stories with acceptance criteria, story points, priorities |
+| **Design Agent** | Software architecture | Design doc with DB schema, REST API spec, tech stack |
+| **Developer Agent** | Code generation | Production-ready, documented source code |
+| **Testing Agent** | QA & test execution | Manual test plan + pytest suite (40+ tests, 100% pass rate) |
 
-## 🛠️ Technology Stack
+---
 
-- **LLM:** Meta Llama 3 8B Instruct (via Hugging Face Router)
-- **Embeddings:** `sentence-transformers/all-MiniLM-L6-v2`
-- **Vector DB:** ChromaDB (local persistent)
-- **Orchestration:** CrewAI
-- **Frontend:** Streamlit
-- **Language:** Python 3.10+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| LLM | Meta Llama 3.3 70B Instruct via Groq (`llama-3.3-70b-versatile`) |
+| Embeddings | `sentence-transformers/all-MiniLM-L6-v2` (HuggingFace) |
+| Vector DB | ChromaDB (local persistent) |
+| Orchestration | CrewAI |
+| Frontend | Streamlit |
+| Test Execution | pytest |
+| Language | Python 3.11 |
 
 ---
 
 ## 🚀 Quick Start
 
-### 1. Clone / Download the Project
-
+### 1. Clone the repository
 ```bash
-# If using Git
-git clone <your-repo-url>
-cd ai_dev_pod
-
-# Or just navigate to the folder in VS Code
+git clone https://github.com/YOUR_USERNAME/ai-dev-pod.git
+cd ai-dev-pod
 ```
 
-### 2. Create a Virtual Environment
-
+### 2. Create virtual environment
 ```bash
-# Create venv
-python -m venv venv
+python -m venv .venv
 
-# Activate (Windows)
-venv\Scripts\activate
+# Windows
+.venv\Scripts\activate
 
-# Activate (Mac/Linux)
-source venv/bin/activate
+# Mac/Linux
+source .venv/bin/activate
 ```
 
-### 3. Install Dependencies
-
+### 3. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configure Environment
-
+### 4. Configure environment
 ```bash
-# Copy the example env file
 cp .env.example .env
 ```
 
-Edit `.env` and set your Hugging Face token:
+Edit `.env` and fill in your API keys:
+```env
+GROQ_API_KEY=gsk_your_groq_key_here
+HUGGINGFACEHUB_API_TOKEN=hf_your_hf_token_here
+LLM_MODEL=llama-3.3-70b-versatile
 ```
-HF_TOKEN=hf_your_actual_token_here
-```
 
-Get your free token at: https://huggingface.co/settings/tokens
+- **Groq API key** (free): https://console.groq.com → API Keys → Create
+- **HuggingFace token** (free): https://huggingface.co/settings/tokens
 
-> **Note:** You need access to `meta-llama/Meta-Llama-3-8B-Instruct`. Request access at: https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct
+> ⚠️ Note: The old `llama3-8b-8192` model has been decommissioned by Groq. Make sure `LLM_MODEL=llama-3.3-70b-versatile` is set in your `.env`.
 
-### 5. Run Setup Script
-
+### 5. Run setup
 ```bash
 python setup.py
 ```
 
-This will:
-- Validate your configuration
-- Create required directories
-- Load templates into ChromaDB
-- Verify the embedding model
+This will validate your config, create required directories, load templates into ChromaDB, and verify the embedding model.
 
-### 6. Launch the Application
-
+### 6. Launch the app
 ```bash
 streamlit run app.py
 ```
 
-Open your browser at: **http://localhost:8501**
+Open your browser at **http://localhost:8501**
 
 ---
 
-## 📖 Usage Guide
+## 📖 Usage
 
-### Running the Full Pipeline
+1. Go to **🚀 Run Pipeline** in the sidebar
+2. Enter a project name and business requirements (or load a sample)
+3. Select programming language and framework
+4. Click **🚀 Launch Pipeline**
+5. View generated artifacts using the sidebar navigation
+6. Run automated tests in **🧪 Test Cases** → **▶️ Run Tests Now**
+7. Chat with the AI Project Lead in **💬 PM Chat**
 
-1. Navigate to **🚀 Run Pipeline** in the sidebar
-2. Enter your **Project Name** (e.g., "Online Banking System")
-3. Enter **Business Requirements** (or load a sample)
-4. Select **Language** and **Framework**
-5. Click **🚀 Launch Pipeline**
-
-The pipeline runs 4 phases sequentially:
-1. **BA Agent** → User Stories
-2. **Design Agent** → Design Document
-3. **Developer Agent** → Source Code
-4. **Testing Agent** → Test Cases + Execution
-
-### Viewing Artifacts
-
-Each artifact type has its own page:
-- **📋 User Stories** — View and download user stories
-- **🏗️ Design Doc** — Architecture and design document
-- **💻 Code** — Generated source code
-- **🧪 Test Cases** — Test suite and execution results
-
-### PM Chat
-
-Go to **💬 PM Chat** to have a conversation with the AI Project Lead:
-- Ask about project status
-- Request quality assessments
-- Query specific artifacts
-- Get explanations of design decisions
+### Sample Projects
+The app includes 3 built-in sample projects:
+- 📚 Online Library System
+- 👥 Employee Management System
+- 🍕 Food Delivery App
 
 ---
 
@@ -161,102 +137,89 @@ Go to **💬 PM Chat** to have a conversation with the AI Project Lead:
 
 ```
 ai_dev_pod/
-├── app.py                    # Main Streamlit entry point
-├── setup.py                  # Setup and initialization script
-├── requirements.txt           # Python dependencies
+├── app.py                    # Streamlit entry point + page router
+├── setup.py                  # First-run initialization script
+├── requirements.txt
 ├── .env.example              # Environment variable template
 │
-├── core/                     # Core infrastructure
-│   ├── llm_client.py         # Llama 3 8B via HuggingFace
-│   ├── vector_store.py       # ChromaDB + MiniLM embeddings
-│   ├── artifact_manager.py   # Artifact persistence
-│   └── orchestrator.py       # CrewAI pipeline orchestration
+├── core/
+│   ├── llm_client.py         # Groq API client (llama-3.3-70b-versatile)
+│   ├── vector_store.py       # ChromaDB + MiniLM embeddings (PersistentClient)
+│   ├── artifact_manager.py   # Artifact save/load/list
+│   └── orchestrator.py       # CrewAI pipeline coordinator
 │
-├── agents/                   # AI Agent implementations
+├── agents/
 │   ├── ba_agent.py           # Business Analyst Agent
 │   ├── design_agent.py       # Design Agent
 │   ├── dev_agent.py          # Developer Agent
-│   └── test_agent.py         # Testing Agent
+│   └── test_agent.py         # Testing Agent (+ pytest execution)
 │
-├── pages/                    # Streamlit pages
-│   ├── dashboard.py          # Main dashboard
-│   ├── pipeline_runner.py    # Pipeline execution
-│   ├── artifact_viewer.py    # Generic artifact viewer
-│   ├── test_runner.py        # Test execution UI
-│   └── pm_chat.py            # PM chat interface
+├── _pages/                   # Streamlit UI pages (prefixed _ to avoid
+│   ├── dashboard.py          # auto-detection by Streamlit's multipage nav)
+│   ├── pipeline_runner.py    # Pipeline execution UI with live log
+│   ├── artifact_viewer.py    # View/download any artifact type
+│   ├── test_runner.py        # Test execution UI + results
+│   └── pm_chat.py            # Conversational PM chat interface
 │
-├── templates/                # Artifact templates (loaded into ChromaDB)
-│   ├── user_stories.txt      # User story template
-│   ├── design_doc.txt        # Design document template
-│   └── test_cases.txt        # Test cases template
-│
-├── artifacts/                # Generated artifacts (auto-created)
-│   ├── user_stories/
-│   ├── design_docs/
-│   ├── code/
-│   └── test_reports/
-│
-├── chroma_db/                # ChromaDB persistence (auto-created)
-└── utils/
-    └── helpers.py            # Utility functions
+└── templates/                # Artifact templates loaded into ChromaDB
+    ├── user_stories.txt
+    ├── design_doc.txt
+    └── test_cases.txt
 ```
+
+> **Note:** The pages folder is named `_pages` (with underscore prefix) intentionally. Streamlit automatically treats any folder named `pages` as a multi-page app and shows an unwanted navigation dropdown. The underscore prefix prevents this while keeping the same import structure.
 
 ---
 
-## ⚙️ Configuration Options
+## ⚙️ Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `HF_TOKEN` | — | **Required.** Hugging Face API token |
-| `LLM_MODEL` | `meta-llama/Meta-Llama-3-8B-Instruct` | LLM model to use |
-| `EMBEDDING_MODEL` | `sentence-transformers/all-MiniLM-L6-v2` | Embedding model |
-| `CHROMA_PERSIST_DIR` | `./chroma_db` | ChromaDB storage location |
-| `ARTIFACTS_DIR` | `./artifacts` | Artifacts storage location |
-| `MAX_TOKENS` | `2048` | Max tokens per generation |
-| `TEMPERATURE` | `0.7` | LLM temperature (0-1) |
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `GROQ_API_KEY` | ✅ Yes | — | Groq API key for LLM generation (get free at console.groq.com) |
+| `HUGGINGFACEHUB_API_TOKEN` | ✅ Yes | — | HuggingFace token for MiniLM embeddings |
+| `LLM_MODEL` | No | `llama-3.3-70b-versatile` | Groq model name |
+| `EMBEDDING_MODEL` | No | `sentence-transformers/all-MiniLM-L6-v2` | Embedding model |
+| `MAX_TOKENS` | No | `2048` | Max tokens per LLM generation |
+| `TEMPERATURE` | No | `0.7` | LLM sampling temperature |
+| `CHROMA_PERSIST_DIR` | No | `./chroma_db` | ChromaDB storage path |
+| `ARTIFACTS_DIR` | No | `./artifacts` | Generated artifacts path |
 
 ---
 
 ## 🔧 Troubleshooting
 
-**"Model is loading" error**
-→ The Llama 3 model takes ~30s to warm up on HuggingFace. Wait and retry.
-
-**"HF_TOKEN not set"**
-→ Make sure `.env` file exists with your token. Run `python setup.py` to verify.
-
-**"Access denied" for Llama 3**
-→ Request model access at https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct
-
-**ChromaDB errors**
-→ Delete `chroma_db/` directory and re-run `python setup.py`
-
-**Streamlit import errors**
-→ Ensure virtual environment is activated and `pip install -r requirements.txt` completed
+| Issue | Fix |
+|-------|-----|
+| `model_decommissioned` error | Set `LLM_MODEL=llama-3.3-70b-versatile` in `.env` |
+| `Invalid API key` error | Generate a new key at https://console.groq.com |
+| ChromaDB deprecated config error | Already fixed — uses `PersistentClient` API |
+| `No module named pytest` | Run `pip install pytest` in your activated venv |
+| Blank screen on sidebar page click | Confirm folder is named `_pages` not `pages` |
+| `0 tests collected` | Fixed — test agent now uses guaranteed self-contained suite |
 
 ---
 
 ## 📋 Requirements
 
 - Python 3.10+
-- 4GB+ RAM (for embedding model)
-- Internet connection (for HuggingFace API calls)
-- Hugging Face account with Llama 3 access
+- 4GB+ RAM (for MiniLM embedding model)
+- Internet connection (for Groq API and HuggingFace embeddings)
 
 ---
 
-## 🎯 Features
+## 👥 Team
 
-- ✅ Full SDLC simulation with 4 specialized AI agents
-- ✅ Meta Llama 3 8B via HuggingFace Router
-- ✅ Semantic template retrieval with ChromaDB + MiniLM
-- ✅ Automated test execution with pytest
-- ✅ Conversational PM chat interface
-- ✅ Artifact download and persistence
-- ✅ Sample projects for quick demo
-- ✅ Real-time pipeline progress
-- ✅ Individual phase execution support
+| Name | Enrollment No | Roll No |
+|------|--------------|---------|
+| Shrotriya Ghosh | 12023052002203 | 196 |
+| Sovan De | 12023052002206 | 199 |
+| Shubhrashis Mondal | 12023052002209 | 202 |
+| Sudip Dinda | 12023052002210 | 203 |
+
+Built as part of an AI/ML academic project.
 
 ---
 
-*Built with ❤️ using Streamlit, CrewAI, LangChain, ChromaDB, and Meta Llama 3*
+## 📄 License
+
+MIT License
